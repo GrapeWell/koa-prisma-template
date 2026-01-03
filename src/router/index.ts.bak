@@ -1,0 +1,30 @@
+import path from 'node:path'
+import { SwaggerRouter } from 'koa-swagger-decorator'
+
+const router = new SwaggerRouter({
+  prefix: '/api',
+})
+
+router.swagger({
+  title: 'Eco Board Server API',
+  description: 'API documentation for Eco Board Server',
+  version: '1.0.0',
+  swaggerHtmlEndpoint: '/swagger-html',
+  swaggerJsonEndpoint: '/swagger-json',
+
+  swaggerConfiguration: {
+    display: {
+      defaultModelsExpandDepth: 4, // The default expansion depth for models (set to -1 completely hide the models).
+      defaultModelExpandDepth: 3, // The default expansion depth for the model on the model-example section.
+      docExpansion: 'list', // Controls the default expansion setting for the operations and tags.
+      defaultModelRendering: 'model', // Controls how the model is shown when the API is first rendered.
+    },
+  },
+})
+
+// 扫描 controller 目录，自动注册路由
+router.mapDir(path.resolve(__dirname, '../controller'), {
+  doValidation: false,
+})
+
+export default router
