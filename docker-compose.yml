@@ -36,29 +36,6 @@ services:
     networks:
       - prisma-network
 
-  prisma-studio:
-    image: node:22-alpine3.22
-    working_dir: /usr/src/app
-    volumes:
-      - .:/usr/src/app
-      - prisma-studio-node_modules:/usr/src/app/node_modules
-      - prisma-studio-pnpm-store:/root/.local/share/pnpm/store
-    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm exec prisma studio --port 5555 --browser none"
-    ports:
-      - "5555:5555"
-    env_file:
-      - .env.prod
-    networks:
-      - prisma-network
-    depends_on:
-      postgres_db:
-        condition: service_healthy
-      server:
-        condition: service_started
 networks:
   prisma-network:
     name: prisma-network
-
-volumes:
-  prisma-studio-node_modules:
-  prisma-studio-pnpm-store:

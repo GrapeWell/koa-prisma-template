@@ -12,12 +12,15 @@
 - **ESLint** - 代码规范检查 (使用 @antfu/eslint-config)
 - **pnpm** - 快速、节省磁盘空间的包管理器
 - **Swagger (OpenAPI)** - 基于 `koa-swagger-decorator` 自动生成 API 文档
+- **Vitest** - 快速生成测试用例
 ## 📁 项目结构
 
 ```
 ├── prisma/
 │   ├── schema.prisma        # Prisma 数据库模型定义
 │   └── migrations/          # 数据库迁移文件
+├── test/
+│   └── sample.test.ts        # Vitest 单元测试（mock Prisma）
 ├── src/
 │   ├── index.ts             # 应用入口
 │   ├── controller/          # 控制器
@@ -37,7 +40,7 @@
 
 - **启用说明**: 项目使用 `koa-swagger-decorator` 自动生成 OpenAPI 文档和 UI。
 - **访问地址**: 启动服务后打开 `http://localhost:3000/api/swagger-html` 查看 Swagger UI；`http://localhost:3000/api/swagger-json` 返回 OpenAPI JSON。
-- **路由前缀**: 当前 API 路由统一前缀为 `/api`（见 [src/router/index.ts](src/router/index.ts#L1)）。
+- **路由前缀**: 当前 API 路由统一前缀为 `/api`（见 [src/router/index.ts](src/router/index.ts#L17)）。
 
 ## 🛠️ 快速开始
 
@@ -59,12 +62,14 @@ pnpm install
 
 ```env
 DATABASE_URL="postgresql://postgres:prisma@localhost:5432/postgres"
+PORT=3000
 ```
 
 创建 `.env.prod` 文件（Docker 环境）:
 
 ```env
 DATABASE_URL="postgresql://postgres:prisma@postgres_db:5432/postgres"
+PORT=3000
 ```
 
 ### 3. 启动数据库
@@ -91,7 +96,7 @@ pnpm dev
 
 ## 🐳 Docker 一键部署
 
-启动所有服务（PostgreSQL + Server + Prisma Studio）:
+启动所有服务（PostgreSQL + Server）:
 
 ```bash
 docker compose up -d
@@ -99,7 +104,6 @@ docker compose up -d
 
 服务端口:
 - **应用服务**: http://localhost:3000
-- **Prisma Studio**: http://localhost:5555
 - **PostgreSQL**: localhost:5432
 
 ## 📜 可用脚本
@@ -107,11 +111,22 @@ docker compose up -d
 | 命令 | 描述 |
 |------|------|
 | `pnpm dev` | 启动开发服务器（热重载） |
+| `pnpm test` | 运行 Vitest 单元测试 |
 | `pnpm lint` | 运行 ESLint 检查 |
 | `pnpm lint:fix` | 自动修复 ESLint 问题 |
 | `pnpm prisma:generate` | 生成 Prisma 客户端 |
 | `pnpm prisma:migrate` | 创建并应用数据库迁移 |
 | `pnpm db:deploy` | 部署迁移并生成客户端（生产环境） |
+
+## ✅ 测试（Vitest）
+
+测试使用 Vitest，目前示例测试通过 `vi.mock('../src/utils/prisma')` + `src/utils/__mocks__/prisma.ts` 深度 mock Prisma Client，因此**不依赖本地 PostgreSQL**。
+
+测试相关资料
+[prisma集成vitest](https://www.prisma.io/blog/testing-series-1-8eRB5p0Y8o)
+```bash
+pnpm test
+```
 
 ## 🗄️ 数据库操作
 
