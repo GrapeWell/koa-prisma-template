@@ -65,13 +65,6 @@ DATABASE_URL="postgresql://postgres:prisma@localhost:5432/postgres"
 PORT=3000
 ```
 
-创建 `.env.prod` 文件（Docker 环境）:
-
-```env
-DATABASE_URL="postgresql://postgres:prisma@postgres_db:5432/postgres"
-PORT=3000
-```
-
 ### 3. 启动数据库
 
 使用 Docker Compose 启动 PostgreSQL:
